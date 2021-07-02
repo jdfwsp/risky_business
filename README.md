@@ -1,6 +1,4 @@
 # 🐍🚨 Risky Business ⚠️🐍
- 
-![Credit Risk](Images/credit-risk.jpg)
 
 ## Background
 
@@ -117,7 +115,7 @@ Use the above to answer the following questions:
 > Every model had a geometric mean of 0.99
 #### Ensemble Learning
 
-In this section, I will train and compare two different ensemble classifiers to predict loan risk and evaluate each model. I will use the [Balanced Random Forest Classifier](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.ensemble.BalancedRandomForestClassifier.html#imblearn-ensemble-balancedrandomforestclassifier) and the [Easy Ensemble Classifier](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.ensemble.EasyEnsembleClassifier.html#imblearn-ensemble-easyensembleclassifier).
+In this section, I will train and compare two different ensemble classifiers to predict loan risk and evaluate each model. I will use the Balanced Random Forest Classifier and the Easy Ensemble Classifier.
 
 Imports:
 ```
