@@ -8,22 +8,10 @@ Mortgages, student and auto loans, and debt consolidation are just a few example
 
 In this assignment you will build and evaluate several machine learning models to predict credit risk using data you'd typically see from peer-to-peer lending services. Credit risk is an inherently imbalanced classification problem (the number of good loans is much larger than the number of at-risk loans), so you will need to employ different techniques for training and evaluating models with imbalanced classes. You will use the imbalanced-learn and Scikit-learn libraries to build and evaluate models using the two following techniques:
 
-1. [Resampling](#Resampling)
-2. [Ensemble Learning](#Ensemble-Learning)
+1. [Resampling](https://github.com/jdfwsp/risky_business/blob/main/Code/credit_risk_resampling.ipynb)
+2. [Ensemble Learning](https://github.com/jdfwsp/risky_business/blob/main/Code/credit_risk_ensemble.ipynb)
 
-- - -
-
-### Files
-
-[Resampling Starter Notebook](Starter_Code/credit_risk_resampling.ipynb)
-
-[Ensemble Starter Notebook](Starter_Code/credit_risk_ensemble.ipynb)
-
-[Lending Club Loans Data](Resources/LoanStats_2019Q1.csv.zip)
-
-- - -
-
-### Instructions
+### Procedure
 
 #### Resampling
 
@@ -32,25 +20,59 @@ Use the [imbalanced learn](https://imbalanced-learn.readthedocs.io) library to r
 To begin:
 
 1. Read the CSV into a DataFrame.
-
+```
+file_path = Path('Resources/lending_data.csv')
+df = pd.read_csv(file_path)
+df = pd.get_dummies(df, columns=['homeowner'])
+```
 2. Split the data into Training and Testing sets.
-
+```
+X = df.drop(columns='loan_status')
+y = df['loan_status']
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+```
 3. Scale the training and testing data using the `StandardScaler` from `sklearn.preprocessing`.
+```
+data_scaler = StandardScaler()
+data_scaler.fit(X_train)
+X_train = data_scaler.transform(X_train)
+X_test = data_scaler.transform(X_test)
+```
 
 4. Use the provided code to run a Simple Logistic Regression:
     * Fit the `logistic regression classifier`.
     * Calculate the `balanced accuracy score`.
     * Display the `confusion matrix`.
     * Print the `imbalanced classification report`.
+```
+model = LogisticRegression(solver='lbfgs', random_state=1)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+balanced_accuracy_score(y_test, y_pred)
+confusion_matrix(y_test, y_pred)
+print(classification_report_imbalanced(y_test, y_pred))
+```
 
 Next you will:
 
 1. Oversample the data using the `Naive Random Oversampler` and `SMOTE` algorithms.
+```
+ros = RandomOverSampler(random_state=1)
+X_train_resampled, y_train_resampled = ros.fit_resample(X_train, y_train)
 
+smote = SMOTE(random_state=1)
+X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
+```
 2. Undersample the data using the `Cluster Centroids` algorithm.
-
+```
+cc = ClusterCentroids(random_state=1)
+X_train_cc, y_train_cc = cc.fit_resample(X_train, y_train)
+```
 3. Over- and undersample using a combination `SMOTEENN` algorithm.
-
+```
+sm = SMOTEENN(random_state=1)
+X_train_sm, y_train_sm = sm.fit_resample(X_train, y_train)
+```
 
 For each of the above, you will need to:
 
@@ -61,16 +83,22 @@ For each of the above, you will need to:
 3. Display the `confusion matrix` from `sklearn.metrics`.
 
 4. Print the `imbalanced classification report` from `imblearn.metrics`.
-
+```
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+balanced_accuracy_score(y_test, y_pred)
+confusion_matrix(y_test, y_pred)
+print(classification_report_imbalanced(y_test, y_pred))
+```
 
 Use the above to answer the following questions:
 
 * Which model had the best balanced accuracy score?
->
+> SMOTE Oversampling
 * Which model had the best recall score?
->
+> All models had avg/total recall score of 0.99
 * Which model had the best geometric mean score?
-
+> Every model had a geometric mean of 0.99
 #### Ensemble Learning
 
 In this section, you will train and compare two different ensemble classifiers to predict loan risk and evaluate each model. You will use the [Balanced Random Forest Classifier](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.ensemble.BalancedRandomForestClassifier.html#imblearn-ensemble-balancedrandomforestclassifier) and the [Easy Ensemble Classifier](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.ensemble.EasyEnsembleClassifier.html#imblearn-ensemble-easyensembleclassifier). Refer to the documentation for each of these to read about the models and see examples of the code.
